@@ -1,0 +1,75 @@
+<!-- ✦ CALCULADORA DE PACKS · Tiles Concept ✦ -->
+<div style="max-width: 520px; margin: 2rem 0; font-family: sans-serif;">
+
+  <h3 style="font-size: 16px; font-weight: 500; margin: 0 0 6px;">📐 ¿Cuántos packs necesitás?</h3>
+  <p style="font-size: 13px; color: #666; margin: 0 0 1.25rem;">Ingresá las medidas de tu pared y te decimos cuántos packs comprar.</p>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+    <div>
+      <label style="font-size: 13px; color: #555; display: block; margin-bottom: 5px;">Ancho de la pared (m)</label>
+      <input type="number" id="tc-ancho" placeholder="ej: 3.5" min="0" step="0.01"
+        style="width: 100%; box-sizing: border-box; padding: 8px 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px;"
+        oninput="tcCalcular()" />
+    </div>
+    <div>
+      <label style="font-size: 13px; color: #555; display: block; margin-bottom: 5px;">Alto de la pared (m)</label>
+      <input type="number" id="tc-alto" placeholder="ej: 2.4" min="0" step="0.01"
+        style="width: 100%; box-sizing: border-box; padding: 8px 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px;"
+        oninput="tcCalcular()" />
+    </div>
+  </div>
+
+  <div style="margin-bottom: 16px;">
+    <label style="font-size: 13px; color: #555; display: block; margin-bottom: 5px;">Descontar ventanas/puertas (m²) — opcional</label>
+    <input type="number" id="tc-descuento" placeholder="ej: 1.2" min="0" step="0.01"
+      style="width: 100%; box-sizing: border-box; padding: 8px 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px;"
+      oninput="tcCalcular()" />
+  </div>
+
+  <div id="tc-resultado" style="display: none; background: #f7f5f2; border-radius: 10px; padding: 1.25rem; margin-top: 0.5rem; border: 1px solid #e8e0d8;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+      <div style="background: #fff; border-radius: 8px; padding: 12px; text-align: center; border: 1px solid #e8e0d8;">
+        <div style="font-size: 11px; color: #999; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.04em;">Superficie</div>
+        <div style="font-size: 22px; font-weight: 500; color: #333;" id="tc-res-m2">—</div>
+        <div style="font-size: 11px; color: #bbb;">m²</div>
+      </div>
+      <div style="background: #fff; border-radius: 8px; padding: 12px; text-align: center; border: 1px solid #e8e0d8;">
+        <div style="font-size: 11px; color: #999; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.04em;">+ 10% recortes</div>
+        <div style="font-size: 22px; font-weight: 500; color: #333;" id="tc-res-m2-extra">—</div>
+        <div style="font-size: 11px; color: #bbb;">m²</div>
+      </div>
+      <div style="background: #3d2b1f; border-radius: 8px; padding: 12px; text-align: center;">
+        <div style="font-size: 11px; color: #c9a98a; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.04em;">Packs</div>
+        <div style="font-size: 30px; font-weight: 500; color: #fff;" id="tc-res-packs">—</div>
+        <div style="font-size: 11px; color: #c9a98a;">x 10 placas c/u</div>
+      </div>
+    </div>
+    <p style="font-size: 12px; color: #999; margin: 0;">Cada pack cubre aprox. 0,52 m² · Se recomienda 10% extra para cortes y ajustes.</p>
+  </div>
+
+</div>
+
+<script>
+function tcCalcular() {
+  var ancho = parseFloat(document.getElementById('tc-ancho').value);
+  var alto = parseFloat(document.getElementById('tc-alto').value);
+  var descuento = parseFloat(document.getElementById('tc-descuento').value) || 0;
+  var porPack = 0.52;
+  var resultado = document.getElementById('tc-resultado');
+
+  if (!ancho || !alto || ancho <= 0 || alto <= 0) {
+    resultado.style.display = 'none';
+    return;
+  }
+
+  var neto = Math.max(0, (ancho * alto) - descuento);
+  var conExtra = neto * 1.1;
+  var packs = Math.ceil(conExtra / porPack);
+
+  document.getElementById('tc-res-m2').textContent = neto.toFixed(2);
+  document.getElementById('tc-res-m2-extra').textContent = conExtra.toFixed(2);
+  document.getElementById('tc-res-packs').textContent = packs;
+  resultado.style.display = 'block';
+}
+</script>
+<!-- ✦ FIN CALCULADORA ✦ -->
